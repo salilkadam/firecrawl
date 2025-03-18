@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-api
+spec:
+  selector:
+    app: firecrawl-api
+  ports:
+  - port: 3002
+    targetPort: 3002
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: firecrawl-playwright
+spec:
+  selector:
+    app: firecrawl-playwright
+  ports:
+  - port: 3000
+    targetPort: 3000
+  type: ClusterIP 

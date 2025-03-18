@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firecrawl-api
+  template:
+    metadata:
+      labels:
+        app: firecrawl-api
+    spec:
+      containers:
+      - name: api
+        image: docker.io/docker4zerocool/firecrawl-api:latest
+        ports:
+        - containerPort: 3002
+        envFrom:
+        - secretRef:
+            name: firecrawl-secrets
+        env:
+        - name: REDIS_URL
+          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
+        - name: REDIS_RATE_LIMIT_URL
+          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
+        - name: REDIS_AUTH
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firecrawl-worker
+  template:
+    metadata:
+      labels:
+        app: firecrawl-worker
+    spec:
+      containers:
+      - name: worker
+        image: docker.io/docker4zerocool/firecrawl-api:latest
+        command: ["pnpm", "run", "workers"]
+        envFrom:
+        - secretRef:
+            name: firecrawl-secrets
+        env:
+        - name: REDIS_URL
+          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
+        - name: REDIS_RATE_LIMIT_URL
+          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
+        - name: REDIS_AUTH
+          valueFrom:
+            secretKeyRef:
+              name: redis-credentials
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firecrawl-playwright
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: firecrawl-playwright
+  template:
+    metadata:
+      labels:
+        app: firecrawl-playwright
+    spec:
+      containers:
+      - name: playwright
+        image: docker.io/docker4zerocool/firecrawl-playwright:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - secretRef:
+            name: firecrawl-secrets
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: firecrawl-redis
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: redis-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi 
