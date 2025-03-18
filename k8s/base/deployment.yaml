@@ -55,7 +55,13 @@ spec:
       containers:
       - name: worker
         image: docker.io/docker4zerocool/firecrawl-api:latest
-        command: ["pnpm", "run", "workers"]
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            npm install -g pnpm nodemon ts-node
+            cd /app
+            pnpm install
+            pnpm run workers
         envFrom:
         - secretRef:
             name: firecrawl-secrets
