@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: docker.io/docker4zerocool/firecrawl-api:latest
+        image: docker.io/docker4zerocool/firecrawl-api:f17f7938ceee0d30829051bdacbbbcf182430914
         ports:
         - containerPort: 3002
         envFrom:
@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: worker
-        image: docker.io/docker4zerocool/firecrawl-api:latest
+        image: docker.io/docker4zerocool/firecrawl-api:f17f7938ceee0d30829051bdacbbbcf182430914
         command: ["pnpm", "run", "workers"]
         envFrom:
         - secretRef:
@@ -93,7 +93,7 @@ spec:
     spec:
       containers:
       - name: playwright
-        image: docker.io/docker4zerocool/firecrawl-playwright:latest
+        image: docker.io/docker4zerocool/firecrawl-playwright:f17f7938ceee0d30829051bdacbbbcf182430914
         ports:
         - containerPort: 3000
         envFrom:
