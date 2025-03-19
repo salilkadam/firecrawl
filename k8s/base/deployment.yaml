@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
       - name: worker
-        image: docker.io/docker4zerocool/firecrawl-api:latest
+        image: docker.io/docker4zerocool/firecrawl-api:7d0edb1f91ba88c3263c45bc82b5902357130395
         command: ["/bin/sh", "-c"]
         args:
           - |
