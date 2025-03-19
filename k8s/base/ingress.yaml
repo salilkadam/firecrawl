@@ -1,0 +1,25 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: firecrawl-api
+  namespace: firecrawl
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+spec:
+  ingressClassName: nginx
+  tls:
+    - secretName: firecrawl-api-tls
+      hosts:
+        - fire.askcollections.com
+  rules:
+    - host: fire.askcollections.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: firecrawl-api
+                port:
+                  number: 80
