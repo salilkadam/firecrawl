@@ -8,7 +8,7 @@ spec:
   ports:
   - port: 3002
     targetPort: 3002
-  type: ClusterIP
+  type: NodePort
 ---
 apiVersion: v1
 kind: Service
@@ -20,4 +20,4 @@ spec:
   ports:
   - port: 3000
     targetPort: 3000
-  type: ClusterIP 
+  type: NodePort 
