@@ -23,11 +23,11 @@ spec:
         env:
         - name: REDIS_URL
 #          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
-          value: "redis://Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
+          value: "redis://:Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
 
         - name: REDIS_RATE_LIMIT_URL
 #          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
-          value: "redis://Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
+          value: "redis://:Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
         - name: REDIS_AUTH
           valueFrom:
             secretKeyRef:
@@ -71,10 +71,10 @@ spec:
         env:
         - name: REDIS_URL
 #          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
-          value: "redis://Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
+          value: "redis://:Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
         - name: REDIS_RATE_LIMIT_URL
 #          value: "redis://$(REDIS_AUTH)@redis-master.redis.svc.cluster.local:6379"
-          value: "redis://Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
+          value: "redis://:Th1515T0p53cr3t@redis-master.redis.svc.cluster.local:6379"
         - name: REDIS_AUTH
           valueFrom:
             secretKeyRef:
